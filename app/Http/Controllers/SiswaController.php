@@ -35,4 +35,12 @@ class SiswaController extends Controller
 
         return redirect('siswa')->with('sukses','Data Berhasil diubah!');
     }
+
+    public function destroy ($id) 
+    {
+        $siswa = Siswa::find($id);
+        $siswa->delete($siswa);
+
+        return redirect('siswa')->with('sukses','Data Berhasil dihapus!');    
+    }
 }
