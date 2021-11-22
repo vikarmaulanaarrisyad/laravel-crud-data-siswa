@@ -25,6 +25,11 @@
             <a class="nav-item nav-link" href="/siswa">Siswa</a>
           </div>
         </div>
+        <form class="form-inline my-2 my-lg-0" method="GET" action="/siswa">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="cari">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
       </nav>
     <div class="container">
         @yield('content')
