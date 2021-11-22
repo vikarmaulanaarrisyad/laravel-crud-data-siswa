@@ -14,4 +14,10 @@ class SiswaController extends Controller
 
         return view('siswa.index', compact('data_siswa'));
     }
+
+    public function create (Request $request) 
+    {
+        Siswa::create($request->all());
+        return redirect('siswa')->with('sukses','Data Berhasil diinputkan!');
+    }
 }

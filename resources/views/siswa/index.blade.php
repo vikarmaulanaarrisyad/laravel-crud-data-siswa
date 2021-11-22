@@ -15,6 +15,11 @@
 
 <body>
     <div class="container">
+        @if (session('sukses'))
+        <div class="alert alert-success" role="alert">
+            {{ session('sukses') }}
+        </div>
+        @endif
         <div class="row">
             <div class="col-6">
                 <h2>Data Siswa</h2>
@@ -60,15 +65,51 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <form action="/siswa/create" method="POST">
+                        {{-- Menyertakan TOken --}}
+                        @csrf
+                        <div class="form-group">
+                            <label for="nama_depan">Nama Depan</label>
+                            <input type="text" class="form-control" id="nama_depan" placeholder="Nama Depan"
+                                name="nama_depan">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nama_belakang">Nama Belakang</label>
+                            <input type="text" class="form-control" id="nama_belakang" placeholder="Nama Belakang"
+                                name="nama_belakang">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Pilih Jenis Kelamin</label>
+                            <select class="form-control" id="exampleFormControlSelect1" name="jenis_kelamin">
+                                <option value="">-- Pilih Jenis Kelamin --</option>
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="agama">Agama</label>
+                            <input type="text" class="form-control" id="agama" placeholder="Agama" name="agama">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Alamat</label>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                                name="alamat"></textarea>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+    {{-- Akhir Dari Modal --}}
 
 
 

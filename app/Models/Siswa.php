@@ -10,5 +10,7 @@ class Siswa extends Model
     use HasFactory;
     // Menambah $table
     protected $table = 'siswa';
+    //  Menambahkan Guarded
+    protected $guarded = [''];
 
 }

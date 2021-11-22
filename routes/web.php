@@ -19,5 +19,7 @@ Route::get('/', function () {
 });
 
 
-// Siswa
+// MANAJEMENT ROUTE SISWA
 Route::get('/siswa', [SiswaController::class, 'index']);
+Route::post('/siswa/create', [SiswaController::class, 'create']);
+
