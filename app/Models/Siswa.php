@@ -13,4 +13,14 @@ class Siswa extends Model
     //  Menambahkan Guarded
     protected $guarded = [''];
 
+    public function getAvatar()
+    {
+        // Mengecek Apakah Gambar ada di databse atau NULL
+        if (!$this->avatar) {
+            return asset('images/default.jpg');
+        }
+        // jika ada
+         return asset('images/'.$this->avatar);
+    }
+
 }

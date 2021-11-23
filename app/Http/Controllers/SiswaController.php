@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Siswa;
+use App\Models\User;
 use Illuminate\Http\Request;
-
+use Nette\Utils\Random;
 
 class SiswaController extends Controller
 {
@@ -25,7 +26,20 @@ class SiswaController extends Controller
 
     public function create(Request $request)
     {
-        Siswa::create($request->all());
+      
+    //    Insert ke table user
+       $user = new User;
+       $user->role = 'siswa';
+       $user->name = $request->nama_depan;
+       $user->email = $request->email;
+       $user->password = bcrypt('rahasia');
+    //    $user->remember_token = Str::random(60);
+       $user->save();
+
+         //  Insert ke table siswa
+         $request->request->add(['user_id' => $user->id]);
+         $siswa =  Siswa::create($request->all());
+
         return redirect('siswa')->with('sukses', 'Data Berhasil diinputkan!');
     }
 
@@ -37,9 +51,19 @@ class SiswaController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $siswa = Siswa::find($id);
-        $siswa->update($request->all());
 
+        // Update file gambar avatar
+        if ($request->hasFile('avatar')) {
+            // Membuat path lokasi gambar beserta nama
+            $request->file('avatar')->move('images/',$request->file('avatar')->getClientOriginalName());
+
+            // Memasukan ke database
+            $siswa->avatar = $request->file('avatar')->getClientOriginalName();
+            $siswa->save();
+        }
+        
         return redirect('siswa')->with('sukses', 'Data Berhasil diubah!');
     }
 
@@ -49,5 +73,13 @@ class SiswaController extends Controller
         $siswa->delete($siswa);
 
         return redirect('siswa')->with('sukses', 'Data Berhasil dihapus!');
+    }
+
+    // Membuat metod profile
+
+    public function profile ($id)
+    {
+        $siswa = Siswa::find($id);
+        return view('siswa.profile', compact('siswa'));
     }
 }
