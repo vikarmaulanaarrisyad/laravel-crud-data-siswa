@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Mapel;
 use App\Models\Siswa;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 use Nette\Utils\Random;
 
 class SiswaController extends Controller
@@ -18,27 +20,42 @@ class SiswaController extends Controller
             // Membuat Variabel siswa
             $data_siswa = Siswa::all(); //Mengambil semua data siswa
         }
-
-
-
         return view('siswa.index', compact('data_siswa'));
     }
 
     public function create(Request $request)
     {
-      
-    //    Insert ke table user
-       $user = new User;
-       $user->role = 'siswa';
-       $user->name = $request->nama_depan;
-       $user->email = $request->email;
-       $user->password = bcrypt('rahasia');
-    //    $user->remember_token = Str::random(60);
-       $user->save();
+        // Membuat validasi
+        $this->validate($request, [
+            'nama_depan' => 'min:3|required',
+            'email' => 'email|required|unique:users',
+            'jenis_kelamin' => 'required',
+            'agama' => 'required',
+            'alamat' => 'required',
+            'avatar' => 'mimes:jpg,png',
+        ]);
 
-         //  Insert ke table siswa
-         $request->request->add(['user_id' => $user->id]);
-         $siswa =  Siswa::create($request->all());
+        //    Insert ke table user
+        $user = new User;
+        $user->role = 'siswa';
+        $user->name = $request->nama_depan;
+        $user->email = $request->email;
+        $user->password = bcrypt('rahasia');
+        $user->save();
+
+        //  Insert ke table siswa
+        $request->request->add(['user_id' => $user->id]);
+        $siswa =  Siswa::create($request->all());
+
+        // Update file gambar avatar
+        if ($request->hasFile('avatar')) {
+            // Membuat path lokasi gambar beserta nama
+            $request->file('avatar')->move('images/', $request->file('avatar')->getClientOriginalName());
+
+            // Memasukan ke database
+            $siswa->avatar = $request->file('avatar')->getClientOriginalName();
+            $siswa->save();
+        }
 
         return redirect('siswa')->with('sukses', 'Data Berhasil diinputkan!');
     }
@@ -57,13 +74,13 @@ class SiswaController extends Controller
         // Update file gambar avatar
         if ($request->hasFile('avatar')) {
             // Membuat path lokasi gambar beserta nama
-            $request->file('avatar')->move('images/',$request->file('avatar')->getClientOriginalName());
+            $request->file('avatar')->move('images/', $request->file('avatar')->getClientOriginalName());
 
             // Memasukan ke database
             $siswa->avatar = $request->file('avatar')->getClientOriginalName();
             $siswa->save();
         }
-        
+
         return redirect('siswa')->with('sukses', 'Data Berhasil diubah!');
     }
 
@@ -77,9 +94,47 @@ class SiswaController extends Controller
 
     // Membuat metod profile
 
-    public function profile ($id)
+    public function profile($id)
     {
         $siswa = Siswa::find($id);
-        return view('siswa.profile', compact('siswa'));
+        $matapelajaran = Mapel::all();
+        // Menyiapkan data untuk chart
+        $categories = [];
+        $data = [];
+        // Looping untuk matapelajaran
+        foreach ($matapelajaran as $mp) {
+            // Jika Siswa memiliki mapel dan nilai maka code ini akan dijalankan
+            if($siswa->mapel()->wherePivot('mapel_id',$mp->id)->first()){
+                $categories[] = $mp->nama;
+                $data[] = $siswa->mapel()->wherePivot('mapel_id',$mp->id)->first()->pivot->nilai;
+            }
+
+        }
+
+        // dd($data);
+        return view('siswa.profile', compact('siswa','matapelajaran','categories','data'));
+    }
+
+    public function addnilai (Request $request, $idsiswa) 
+    {    
+        // Memasukan Data dari form ke pivot tabel mapel_siswa
+        $siswa = Siswa::find($idsiswa);
+
+        // Membuat Validasi jika mapel sudah ada 
+        if($siswa->mapel()->where('mapel_id',$request->mapel)->exists()){
+            return redirect('siswa/'.$idsiswa.'/profile')->with('error','Data mata pelajaran sudah ada');
+        }
+        // Relasinya dari tabel mapel
+        $siswa->mapel()->attach($request->mapel,['nilai' => $request->nilai]);
+
+        return redirect('siswa/'.$idsiswa.'/profile')->with('sukses','Data Nilai Berhasil ditambahkan');
+    }
+
+    public function deletenilai ($idsiswa, $idmapel)
+    {
+        $siswa = Siswa::find($idsiswa);
+        $siswa->mapel()->detach($idmapel);
+
+        return redirect()->back()->with('sukses','Data Nilai Berhasil Dihapus');
     }
 }

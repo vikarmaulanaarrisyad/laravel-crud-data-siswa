@@ -23,4 +23,10 @@ class Siswa extends Model
          return asset('images/'.$this->avatar);
     }
 
+    // Relasi Dari Tabel Siswa ke Mapel dengan ManyToMany
+    public function mapel () {
+        // sertakan mengambil pivot
+        return $this->belongsToMany(Mapel::class)->withPivot('nilai')->withTimestamps();
+    }
+
 }
