@@ -15,6 +15,10 @@
                                     data-toggle="modal" data-target="#exampleModal">
                                     Tambah Data Siswa
                                 </button> --}}
+                                <a href="/siswa/exportpdf" class="btn btn-sm btn-danger">PDF </a>
+                                <a href="/siswa/exportExcel" class="btn btn-sm btn-primary">EXCEL </a>
+
+
                                 <button type="button" data-toggle="modal" data-target="#exampleModal"><i
                                         class="lnr lnr-plus-circle"></i></button>
                             </div>
@@ -28,6 +32,7 @@
                                         <th>JENIS KELAMIN</th>
                                         <th>AGAMA</th>
                                         <th>ALAMAT</th>
+                                        <th>RATA2 NILAI</th>
                                         <th>AKSI</th>
                                     </tr>
                                 </thead>
@@ -40,6 +45,7 @@
                                         <td>{{ $siswa->jenis_kelamin }}</td>
                                         <td>{{ $siswa->agama }}</td>
                                         <td>{{ $siswa->alamat }}</td>
+                                        <td>{{ $siswa->rataRatanilai() }}</td>
                                         <td>
                                             <a href="/siswa/{{ $siswa->id }}/edit"
                                                 class="btn btn-warning btn-sm">Edit</a>

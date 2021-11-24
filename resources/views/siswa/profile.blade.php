@@ -32,7 +32,7 @@
                             <div class="overlay"></div>
                             <div class="profile-main">
                                 <img src="{{ $siswa->getAvatar()}}" class="img-circle" width="50%" alt="Avatar">
-                                <h3 class="name">{{ $siswa->nilai }}</h3>
+                                <h3 class="name">{{ $siswa->nama_depan }}</h3>
                                 <span class="online-status status-available">Available</span>
                             </div>
                             <div class="profile-stat">
@@ -41,7 +41,7 @@
                                         {{ $siswa->mapel->count() }} <span>Mapel</span>
                                     </div>
                                     <div class="col-md-4 stat-item">
-                                        15 <span>Awards</span>
+                                        {{ $siswa->rataRatanilai() }} <span>Rata-Rata Nilai</span>
                                     </div>
                                     <div class="col-md-4 stat-item">
                                         2174 <span>Points</span>
@@ -79,7 +79,6 @@
                             </button>
                         </div>
 
-
                         <div class="panel">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Mata Pelajaran</h3>
@@ -92,6 +91,7 @@
                                             <th>NAMA</th>
                                             <th>SEMESTER</th>
                                             <th>NILAI</th>
+                                            <th>GURU</th>
                                             <th>AKSI</th>
                                         </tr>
                                     </thead>
@@ -108,8 +108,10 @@
                                                     }}</a>
 
                                             </td>
+                                            <td> <a href="/guru/{{ $mapel->guru_id }}/profile">{{ $mapel->guru->nama }} </a></td>
                                             <td>
-                                                <a href="/siswa/{{ $siswa->id }}/{{ $mapel->id }}/deletenilai" class="btn btn-danger btn-sm"
+                                                <a href="/siswa/{{ $siswa->id }}/{{ $mapel->id }}/deletenilai"
+                                                    class="btn btn-danger btn-sm"
                                                     onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data Siswa?')">Delete</a>
                                             </td>
                                         </tr>
@@ -168,9 +170,6 @@
                         <span class="help-block">{{ $errors->first('nilai') }}</span>
                         @endif
                     </div>
-
-
-
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

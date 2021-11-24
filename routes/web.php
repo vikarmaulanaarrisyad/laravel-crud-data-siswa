@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GuruController;
 use App\Http\Controllers\SiswaController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +39,10 @@ Route::group(['middleware' => ['auth','checkRole:admin']], function(){
     Route::get('/siswa/{id}/profile', [SiswaController::class, 'profile']);
     Route::post('/siswa/{id}/addnilai', [SiswaController::class, 'addnilai']);
     Route::get('/siswa/{id}/{idmapel}/deletenilai', [SiswaController::class, 'deletenilai']);
+    Route::get('/siswa/exportExcel',[SiswaController::class, 'exportExcel']);
+    Route::get('/siswa/exportpdf',[SiswaController::class, 'exportpdf']);
+    Route::get('/guru/{id}/profile',[GuruController::class, 'profile']);
+
 });
 
 // Level Admin dan siswa
