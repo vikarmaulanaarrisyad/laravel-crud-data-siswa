@@ -49,8 +49,8 @@
                                         <td>
                                             <a href="/siswa/{{ $siswa->id }}/edit"
                                                 class="btn btn-warning btn-sm">Edit</a>
-                                            <a href="/siswa/{{ $siswa->id }}/delete" class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Data Siswa?')">Delete</a>
+                                            <a href="#" class="btn btn-danger btn-sm delete" siswa-id="{{ $siswa->id }}"
+                                                siswa-nama="{{ $siswa->nama_lengkap() }}">Delete</a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -157,3 +157,31 @@
 </div>
 
 @endsection
+
+@section('footer')
+<script>
+    // Button Delete
+    $('.delete').click(function(){
+        var siswa_id = $(this).attr('siswa-id');  //Mengambil id siswa pada tombol delete
+        var nama_siswa = $(this).attr('siswa-nama');
+        // console.log(siswa_id);
+        swal({
+                title: "Apakah Kamu Yakin?",
+                text: "Menghapus data siswa bernama "+ nama_siswa+ " ?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                })
+                .then((willDelete) => {
+                if (willDelete) {
+                    window.location = "/siswa/"+siswa_id+"/delete";
+                    swal({
+                            title: "Sukses",
+                            text: "Data Siswa " + nama_siswa+ " Berhasil Dihapus",
+                            icon: "success",
+                        });
+                    } 
+                });
+            });
+</script>
+@stop

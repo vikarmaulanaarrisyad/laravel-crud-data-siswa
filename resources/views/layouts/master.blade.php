@@ -20,7 +20,9 @@
 	<!-- ICONS -->
 	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
 	<link rel="icon" type="image/png" sizes="96x96" href="{{ asset('admin/assets/img/favicon.png') }}">
-	{{-- Pluggin tambahan --}}
+
+	{{-- Pluggin tambahan TOASTR --}}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"></script>
 	@yield('header')
 </head>
 
@@ -52,6 +54,14 @@
 	<script src="{{ asset('admin/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
 	<script src="{{ asset('admin/assets/vendor/chartist/js/chartist.min.js') }}"></script>
 	<script src="{{ asset('admin/assets/scripts/klorofil-common.js') }}"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	{{-- <script>
+		@if (Session::has('sukses'))
+			toastr.success("{{ Session::get('sukses') }}", "Sukses");
+			
+		@endif
+	</script> --}}
 	@yield('footer')
 	
 </body>

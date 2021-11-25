@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,9 +18,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
+// Route::get('/', function () {
+//     return view('home');
+// });
+Route::get('/',[SiteController::class, 'home']);
+Route::post('/register',[SiteController::class, 'register']);
+Route::get('/about',[SiteController::class, 'about']);
+
 
 
 // Login
@@ -33,10 +38,10 @@ Route::get('/logout', [AuthController::class, 'logout']);
 Route::group(['middleware' => ['auth','checkRole:admin']], function(){
     Route::get('/siswa', [SiswaController::class, 'index']);
     Route::post('/siswa/create', [SiswaController::class, 'create']);
-    Route::get('/siswa/{id}/edit', [SiswaController::class, 'edit']);
-    Route::post('/siswa/{id}/update', [SiswaController::class, 'update']);
-    Route::get('/siswa/{id}/delete', [SiswaController::class, 'destroy']);
-    Route::get('/siswa/{id}/profile', [SiswaController::class, 'profile']);
+    Route::get('/siswa/{siswa}/edit', [SiswaController::class, 'edit']);
+    Route::post('/siswa/{siswa}/update', [SiswaController::class, 'update']);
+    Route::get('/siswa/{siswa}/delete', [SiswaController::class, 'destroy']);
+    Route::get('/siswa/{siswa}/profile', [SiswaController::class, 'profile']);
     Route::post('/siswa/{id}/addnilai', [SiswaController::class, 'addnilai']);
     Route::get('/siswa/{id}/{idmapel}/deletenilai', [SiswaController::class, 'deletenilai']);
     Route::get('/siswa/exportExcel',[SiswaController::class, 'exportExcel']);

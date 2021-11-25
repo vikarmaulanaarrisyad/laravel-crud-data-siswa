@@ -61,16 +61,16 @@ class SiswaController extends Controller
         return redirect('siswa')->with('sukses', 'Data Berhasil diinputkan!');
     }
 
-    public function edit($id)
+    public function edit(Siswa $siswa)
     {
-        $siswa = Siswa::find($id); //Mengambil data siswa berdasarkan ID
+        // $siswa = Siswa::find($id); //Mengambil data siswa berdasarkan ID
         return view('siswa/edit', compact('siswa'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Siswa $siswa)
     {
         // dd($request->all());
-        $siswa = Siswa::find($id);
+        // $siswa = Siswa::find($id);
 
         // Update file gambar avatar
         if ($request->hasFile('avatar')) {
@@ -85,9 +85,9 @@ class SiswaController extends Controller
         return redirect('siswa')->with('sukses', 'Data Berhasil diubah!');
     }
 
-    public function destroy($id)
+    public function destroy(Siswa $siswa)
     {
-        $siswa = Siswa::find($id);
+        // $siswa = Siswa::find($id);
         $siswa->delete($siswa);
 
         return redirect('siswa')->with('sukses', 'Data Berhasil dihapus!');
@@ -95,9 +95,9 @@ class SiswaController extends Controller
 
     // Membuat metod profile
 
-    public function profile($id)
+    public function profile(Siswa $siswa)
     {
-        $siswa = Siswa::find($id);
+        // $siswa = Siswa::find($id);
         $matapelajaran = Mapel::all();
         // Menyiapkan data untuk chart
         $categories = [];
@@ -150,6 +150,6 @@ class SiswaController extends Controller
         $siswa = Siswa::all();
         $pdf = PDF::loadView('export.siswapdf',compact('siswa'));
         // dd($pdf);
-        return $pdf->download('siswa.pdf');
+        return $pdf->download('Laporan Data Siswa.pdf');
     }
 }
